@@ -210,7 +210,7 @@ export default function App() {
         <span>{todos.filter((t) => !t.completed).length} items left</span>
         <span>
           <a
-            href="https://github.com/your-profile"
+            href="https://github.com/JRithanya/iaaxin-rithanya-todo"
             target="_blank"
             rel="noopener noreferrer"
           >
