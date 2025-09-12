@@ -1,0 +1,540 @@
+:root {
+  --bg: #f6f7fb;
+  --card: #ffffff;
+  --text: #1a1a1a;
+  --muted: #6b7280;
+  --accent: #2563eb;
+  --primary: #2563eb;
+  --border: rgba(0, 0, 0, 0.08);
+  --shadow: none;
+    --icon-color: #2b2828; /* Light mode close icon color */
+  --accent: #2563eb; 
+}
+
+.dark {
+  --bg: #1e1e20;
+  --card: #1e1e20;
+  --text: #e5e7eb;       /* Brighter text for dark backgrounds */
+  --muted: #9ca3af;
+  --accent: #3b82f6;
+  --primary: #3b82f6;
+  --border: rgba(255, 255, 255, 0.08);
+  --shadow: none;
+  --icon-color: #252323; /* Dark mode close icon color */
+  --accent: #3b82f6;
+}
+/* Dropdown (All Categories) text */
+.dark select {
+  color: var(--text);
+  background-color: var(--card);
+  border: 1px solid var(--border);
+}
+
+/* Search placeholder text in dark mode */
+.dark input::placeholder {
+  color: #d1d5db; /* Lighter gray for placeholder */
+}
+
+/* Status filter buttons: All, Active, Completed */
+.dark .status-filter button {
+  color: var(--text);
+  background: transparent;
+  border: 1px solid var(--border);
+}
+
+.dark .status-filter button.active {
+  background: var(--accent);
+  color: #ffffff; /* White for active button text */
+}
+
+/* Theme toggle (Light Mode text) */
+.dark .header-actions,
+.dark .header-actions button,
+.dark .header-actions span {
+  color: var(--text);
+}
+
+body {
+  margin: 0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.app {
+  max-width: 1000px;
+  width: 100%;
+  margin: 30px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* Align everything to the left */
+  gap: 20px; /* Space between elements */
+  padding: 10px 20px;
+  ;
+}
+
+.header-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.search {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  outline: none;
+  margin-left: auto;
+}
+
+.search-container {
+  display: flex;
+  justify-content: flex-end;  /* Align search to the right */
+  gap: 10px;                  /* Space between search and dropdown */
+  width: 100%;
+}
+
+.btn {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  background: transparent;
+}
+
+.btn.primary {
+  background-color: var(--primary);
+  color: #ffffff;        /* White text in light mode */
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.status-filter {
+  display: flex;
+  gap: 10px;
+    margin-left: 2px;    
+    justify-content: center;
+}
+
+.status-filter button {
+  padding: 10px 60px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+}
+
+.status-filter button.active {
+  background: var(--accent);
+  color: white;
+  border: none;
+}
+
+.list-wrap {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 2px 20px;
+  background: var(--card);
+  max-width: 600px;        /* Shrink the width */
+  margin: 0 auto;       /* Center the list */
+}
+
+.empty {
+  text-align: center;
+  padding: 200px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.footer {
+  position: fixed;         /* Stick to bottom */
+  bottom: 10px;            /* Space from bottom */
+  left: 0;
+  width: 100%;             /* Take full width */
+  display: flex;           /* Flexbox layout */
+  justify-content: center; /* Left & Right */
+  padding: 0px 20px;         /* Side spacing */
+  font-size: 14px;
+  color: #94a3b8;          /* Soft gray text */
+  gap: 300px;
+}
+
+
+/* Modal Styling */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modal {
+  background-color: #1e1e1e;    /* Dark background */
+  color: #fff;                  /* White text */
+  padding: 28px;                /* Increase padding for more space inside */
+  border-radius: 12px;          /* Rounded corners */
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.7);
+  max-width: 600px;             /* Expand width */
+  width: 90%;                   /* Responsive for smaller screens */
+  margin: auto;
+  font-family: Arial, sans-serif;
+}
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+}
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+/* Wrapper for search input and categories dropdown */
+.search-categories {
+  display: flex;
+  justify-content: center; /* Align them to the right */
+  gap: 10px;                 /* Space between search and dropdown */
+  width: 100%;               /* Take up full width so flex-end works */
+
+}
+
+/* Style for search input */
+.search-categories .search {
+  padding: 10px 100px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  outline: none;
+  margin-left: 10px;
+}
+
+/* Style for the categories dropdown */
+.search-categories select {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+.header h1 {
+  margin-left: auto;     /* Pushes it to the right inside flex container */
+  text-align: center;     /* Align text content to the right */
+  flex: 1;               /* Ensures it takes available space for alignment */
+}
+
+
+
+/* Inputs */
+.modal input[type="text"],
+.modal input[type="date"],
+.modal select {
+  width: 100%;
+  padding: 12px;                /* Bigger input fields */
+  background-color: #2b2b2b;
+  border: 1px solid #555;
+  border-radius: 6px;
+  color: #fff;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  font-size: 16px;              /* Larger text */
+}
+
+/* Buttons */
+.modal button {
+  padding: 10px 18px;           /* Larger buttons */
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* Add button */
+.modal .add-todo-btn {
+  background-color: #3b82f6;
+  color: #fff;
+}
+
+.modal .add-todo-btn:hover {
+  background-color: #2563eb;
+}
+
+/* Cancel button */
+.modal .cancel-btn {
+  background-color: transparent;
+  color: #bbb;
+}
+
+.modal .cancel-btn:hover {
+  color: #fff;
+}
+
+/* Close icon */
+.modal .close-icon {
+  color: #aaa;
+  float: right;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.modal .close-icon:hover {
+  color: #fff;
+}
+
+
+/* 🌞 Light Mode (default) */
+:root {
+  --bg: #f6f7fb;
+  --card: #ffffff;
+  --text: #1a1a1a;       /* Text color for light mode */
+  --muted: #6b7280;
+  --accent: #2563eb;
+  --icon-color: #1a1a1a; /* Icon color for light mode */
+  --primary: #2563eb;
+  --border: rgba(0, 0, 0, 0.08);
+}
+
+/* 🌙 Dark Mode */
+.dark {
+  --bg: #1e1e20;
+  --card: #1e1e20;
+  --text: #e5e7eb;        /* Text color for dark mode */
+  --muted: #9ca3af;
+  --accent: #3b82f6;
+  --icon-color: #ffffff;  /* Icon color for dark mode */
+  --primary: #3b82f6;
+  --border: rgba(255, 255, 255, 0.08);
+}
+
+/* Apply colors to text */
+body, .app, .header, .modal, .status-filter button {
+  color: var(--text);
+}
+
+/* Apply icon color */
+.icon, 
+button.btn svg, 
+button.btn span {
+  color: var(--icon-color);
+  fill: var(--icon-color); /* For SVGs that use fill */
+}
+
+/* Dropdown, search, and filter colors */
+.search, 
+select, 
+.status-filter button {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+/* Hover states for buttons and icons */
+button.btn:hover svg,
+button.btn:hover span {
+  color: var(--accent);
+  fill: var(--accent);
+}
+/* Container for the todo list */
+.todo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+
+
+/* Todo Item Card */
+.todo-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--card-bg, #1f1f1f);
+  padding: 1.25rem 1.5rem;   /* more padding */
+  border-radius: 12px;       /* softer corners */
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  min-height: 250px;          /* increase height */
+  min-width: 400px;
+}
+
+.todo-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Left Section (checkbox + text) */
+.todo-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  flex: 1;
+}
+
+.todo-checkbox {
+  width: 20px;
+  height: 10px;
+  cursor: pointer;
+  margin-top: 4px;
+}
+
+.todo-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.todo-title {
+  font-size: 1rem;   /* bigger title */
+  font-weight: 600;
+  color: var(--text-color, #fff);
+}
+
+.todo-meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.95rem;
+  color: #aaa;
+}
+
+.todo-category {
+  background: #2a3b4d;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: #b0cfff;
+}
+
+.todo-date {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #bbb;
+}
+
+/* Actions (trash icon) */
+.todo-actions {
+  color: #888;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 6px;
+  transition: color 0.2s ease;
+}
+
+.todo-actions:hover {
+  color: #ff6b6b;
+}
+.delete-btn {
+  background: none;
+  border: none;
+  color: #565656;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.delete-btn:hover {
+  color: #4a4a4a;
+  transform: scale(1.1);
+}
+
+
+
+/* Target your select element */
+select {
+  background-color: #1e293b; /* Dark background */
+  color: #f8fafc; /* Light text */
+  border: 1px solid #3b82f6; /* Blue border */
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* Dropdown options */
+select option {
+  background-color: #1e293b; /* Dropdown option background */
+  color: #f8fafc; /* Text color */
+  padding: 8px;
+}
+
+
+
+/* Modal labels */
+.modal label {
+  color: #ffffff;   /* ✅ White text */
+  font-weight: 500; /* Make it clearer */
+  margin-bottom: 6px;
+  display: block;
+}
+
+/* Input and select placeholder text */
+.modal input::placeholder,
+.modal select,
+.modal input {
+  color: #e5e7eb;    /* ✅ Light gray text */
+  background-color: #374151; /* Keep dark background */
+  border: 1px solid #374151;
+  padding: 8px 10px;
+  border-radius: 6px;
+}
+
+/* Date input text color */
+.modal input[type="date"] {
+  color: #ffffff; /* ✅ White text for date picker */
+}
+
+
+.modal .cancel-btn {
+  background: transparent;   /* No background */
+  color: #ffffff;           /* ✅ White text */
+  border: 1px solid #ffffff; /* White border */
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.modal .cancel-btn:hover {
+  background: #374151; /* Slight hover effect */
+}
+
+/* Modal Header Title */
+.modal-header h2 {
+  color: #ffffff;   /* ✅ White text */
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+
+
+
+/* Close icon */
+.modal .close-icon {
+  color: var(--icon-color); /* Uses CSS variable for easy light/dark switching */
+  cursor: pointer;
+  font-size: 20px;
+  transition: color 0.3s ease; /* Smooth color change on hover */
+}
+
+.modal .close-icon:hover {
+  color: var(--accent); /* Highlight color on hover */
+}
