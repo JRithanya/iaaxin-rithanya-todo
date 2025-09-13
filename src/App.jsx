@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ThemeToggle from "./components/ThemeToggle";
 import useTodos from "./hooks/useTodos";
-import { FaTrash } from "react-icons/fa"; // ✅ use React Icons
+import { FaTrash } from "react-icons/fa";
 import "./index.css";
 
 export default function App() {
@@ -21,19 +21,46 @@ export default function App() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [todoText, setTodoText] = useState("");
-  const [todoCategory, setTodoCategory] = useState("personal");
+  const [todoCategory, setTodoCategory] = useState("");
   const [todoDate, setTodoDate] = useState("");
+  const [errors, setErrors] = useState({});
+
+  // ✅ Default categories
+  const defaultCategories = ["personal", "work", "shopping", "others"];
+
+  // ✅ Merge defaults with dynamic categories (avoid duplicates)
+  const allCategories = [...new Set([...defaultCategories, ...categories])];
+
+  // ✅ Validation function
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!todoText.trim()) {
+      newErrors.text = "Todo text is required.";
+    }
+
+    if (!todoCategory || todoCategory.trim() === "") {
+      newErrors.category = "Please select a category.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleAddTodo = () => {
-    if (!todoText.trim()) return;
+    if (!validateForm()) return;
+
     addTodo({
       title: todoText,
       category: todoCategory,
       dueDate: todoDate || null,
     });
+
+    // Reset fields
     setTodoText("");
-    setTodoCategory("personal");
+    setTodoCategory("");
     setTodoDate("");
+    setErrors({});
     setIsModalOpen(false);
   };
 
@@ -64,7 +91,7 @@ export default function App() {
           onChange={(e) => setCategoryFilter(e.target.value)}
         >
           <option value="all">All Categories</option>
-          {categories.map((cat) => (
+          {allCategories.map((cat) => (
             <option key={cat} value={cat}>
               {cat.charAt(0).toUpperCase() + cat.slice(1)}
             </option>
@@ -160,27 +187,47 @@ export default function App() {
                 ✖
               </button>
             </div>
+
+            {/* Todo Text */}
             <label>Todo Text</label>
             <input
               type="text"
               placeholder="What needs to be done?"
               value={todoText}
-              onChange={(e) => setTodoText(e.target.value)}
+              onChange={(e) => {
+                setTodoText(e.target.value);
+                if (errors.text) {
+                  setErrors((prev) => ({ ...prev, text: "" }));
+                }
+              }}
+              className={errors.text ? "input-error" : ""}
             />
+            {errors.text && <p className="error">{errors.text}</p>}
+
+            {/* Category + Due Date */}
             <div className="modal-row">
               <div className="field">
                 <label>Category</label>
                 <select
                   value={todoCategory}
-                  onChange={(e) => setTodoCategory(e.target.value)}
+                  onChange={(e) => {
+                    setTodoCategory(e.target.value);
+                    if (errors.category) {
+                      setErrors((prev) => ({ ...prev, category: "" }));
+                    }
+                  }}
+                  className={errors.category ? "input-error" : ""}
                 >
-                  {categories.map((cat) => (
+                  <option value="">-- Select Category --</option>
+                  {allCategories.map((cat) => (
                     <option key={cat} value={cat}>
                       {cat.charAt(0).toUpperCase() + cat.slice(1)}
                     </option>
                   ))}
                 </select>
+                {errors.category && <p className="error">{errors.category}</p>}
               </div>
+
               <div className="field">
                 <label>Due Date (optional)</label>
                 <input
@@ -190,6 +237,8 @@ export default function App() {
                 />
               </div>
             </div>
+
+            {/* Actions */}
             <div className="modal-actions">
               <button
                 className="cancel-btn"
@@ -214,7 +263,7 @@ export default function App() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Rithanya|Source Code
+            Rithanya | Source Code
           </a>
         </span>
       </div>

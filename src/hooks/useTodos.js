@@ -1,79 +1,54 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
-
-const STORAGE_KEY = "enhanced-todo.v1";
+import { useState, useMemo } from "react";
 
 export default function useTodos() {
-    // Todos state with localStorage initial load
-    const [todos, setTodos] = useState(() => {
-        try {
-            const raw = localStorage.getItem(STORAGE_KEY);
-            return raw ? JSON.parse(raw) : [];
-        } catch (err) {
-            console.error("Failed to load todos:", err);
-            return [];
-        }
-    });
-
+    const [todos, setTodos] = useState([]);
     const [statusFilter, setStatusFilter] = useState("all");
     const [categoryFilter, setCategoryFilter] = useState("all");
     const [search, setSearch] = useState("");
 
-    // Persist todos to localStorage
-    useEffect(() => {
-        try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
-        } catch (err) {
-            console.error("Failed to save todos:", err);
-        }
-    }, [todos]);
+    // ✅ Add Todo
+    const addTodo = (todo) => {
+        setTodos((prev) => [
+            ...prev,
+            { id: Date.now(), completed: false, ...todo },
+        ]);
+    };
 
-    const addTodo = useCallback(({ title, category, dueDate }) => {
-        if (!title || !title.trim()) return;
-        const newTodo = {
-            id: Date.now().toString(),
-            title: title.trim(),
-            category: category || "work",
-            dueDate: dueDate || null,
-            completed: false,
-            createdAt: new Date().toISOString(),
-        };
-        setTodos((prev) => [newTodo, ...prev]);
-    }, []);
-
-    const toggleTodo = useCallback((id) => {
+    // ✅ Toggle Complete
+    const toggleComplete = (id) => {
         setTodos((prev) =>
             prev.map((todo) =>
                 todo.id === id ? { ...todo, completed: !todo.completed } : todo
             )
         );
-    }, []);
+    };
 
-    const deleteTodo = useCallback((id) => {
+    // ✅ Delete
+    const deleteTodo = (id) => {
         setTodos((prev) => prev.filter((todo) => todo.id !== id));
-    }, []);
+    };
 
-    const editTodo = useCallback((id, updates) => {
-        setTodos((prev) =>
-            prev.map((todo) => (todo.id === id ? { ...todo, ...updates } : todo))
-        );
-    }, []);
-
+    // ✅ Category list
     const categories = useMemo(() => {
-        const defaultList = ["work", "personal", "shopping"];
-        const found = Array.from(
-            new Set(todos.map((t) => t.category).filter(Boolean))
-        );
-        return Array.from(new Set([...defaultList, ...found]));
+        const cats = todos.map((t) => t.category);
+        return [...new Set(cats)];
     }, [todos]);
 
+    // ✅ Filtering
     const filtered = useMemo(() => {
-        return todos.filter((todo) => {
-            if (statusFilter === "active" && todo.completed) return false;
-            if (statusFilter === "completed" && !todo.completed) return false;
-            if (categoryFilter !== "all" && todo.category !== categoryFilter) return false;
-            if (search && !todo.title.toLowerCase().includes(search.toLowerCase())) return false;
-            return true;
-        });
+        return todos
+            .filter((todo) => {
+                if (statusFilter === "active") return !todo.completed;
+                if (statusFilter === "completed") return todo.completed;
+                return true;
+            })
+            .filter((todo) => {
+                if (categoryFilter === "all") return true;
+                return todo.category === categoryFilter;
+            })
+            .filter((todo) =>
+                todo.title.toLowerCase().includes(search.toLowerCase())
+            );
     }, [todos, statusFilter, categoryFilter, search]);
 
     return {
@@ -81,15 +56,13 @@ export default function useTodos() {
         filtered,
         categories,
         addTodo,
-        toggleTodo,
+        toggleComplete,
         deleteTodo,
-        editTodo,
         statusFilter,
         setStatusFilter,
         categoryFilter,
         setCategoryFilter,
         search,
         setSearch,
-        setTodos,
     };
 }
